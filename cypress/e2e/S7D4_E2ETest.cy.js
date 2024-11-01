@@ -67,7 +67,29 @@ describe("A template spec", () => {
     cy.contains("I agree").click();
     cy.get('[data-cy="submit"]').click();
   });
+
+  it("shows one error for invalid email.", () => {
+    cy.visit("http://localhost:5173");
+    cy.get('[data-cy="email"]').type("erdem.gun");
+    cy.get('[data-cy="error"]').should("have.length", 1);
+    cy.get('[data-cy="error"]').contains(/Please enter/);
+  });
 });
+
+describe("Success testler:", () => {
+  it("success", () => {
+    cy.visit("http://localhost:5173");
+    cy.get('[data-cy="email"]').type("erdem.guntay@wit.com.tr");
+    cy.get('[data-cy="password"]').type("9fxIH0GXesEwH_I");
+    cy.get('[data-cy="terms').click();
+    cy.get('[data-cy="submit"]').click();
+    cy.url().should("contain", "/main");
+  });
+});
+
+// ARRANGE -> Visit
+// ACT -> Geçersiz email yazdır.
+// ASSERST -> "1" hata mesajı
 
 /*
 b) Hatalı durumlarda beklenen hata mesajları görünüyor ve buton disabled kalıyor.
@@ -91,11 +113,3 @@ setTimeout(() => {
   console.log("Delayed for 1 second.");
 }, "3000");
 */
-
-describe("B template spec", () => {
-  it("passes", () => {
-    cy.visit("http://localhost:5173");
-    cy.get('[data-cy="email"]').type("erdem.gun@wit.com.tr");
-    cy.get('[data-cy="password"]').type("9fxIH0GXesEwH_K");
-  });
-});
